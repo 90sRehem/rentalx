@@ -1,5 +1,5 @@
-import { Category } from "../../model/Category";
-import { ICategoryRepository } from "../../repositories/ICategoriesRepository";
+import { Category } from '../../entities/Category';
+import { ICategoryRepository } from '../../repositories/ICategoriesRepository';
 
 export class ListCategoriesService {
     // eslint-disable-next-line prettier/prettier
