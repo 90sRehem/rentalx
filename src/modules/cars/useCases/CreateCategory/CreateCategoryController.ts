@@ -1,16 +1,16 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
-import { CreateCategoryService } from "./CreateCategoryService";
+import { CreateCategoryService } from './CreateCategoryService';
 
 export class CreateCategoryController {
     // eslint-disable-next-line prettier/prettier
     constructor(private createCategoryService: CreateCategoryService) { }
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    handle(request: Request, response: Response) {
+    async handle(request: Request, response: Response): Promise<Response> {
         const { name, description } = request.body;
 
-        this.createCategoryService.execute({ name, description });
+        await this.createCategoryService.execute({ name, description });
         return response.status(201).send();
     }
 }

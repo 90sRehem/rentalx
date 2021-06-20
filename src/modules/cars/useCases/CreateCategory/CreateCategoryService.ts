@@ -1,4 +1,4 @@
-import { ICategoryRepository } from "../../repositories/ICategoriesRepository";
+import { ICategoryRepository } from '../../repositories/ICategoriesRepository';
 
 interface IRequest {
     name: string;
@@ -8,13 +8,13 @@ interface IRequest {
 export class CreateCategoryService {
     // eslint-disable-next-line prettier/prettier
     constructor(private categoriesRepository: ICategoryRepository) { }
-    execute({ name, description }: IRequest): void {
-        const categoryExists = this.categoriesRepository.findByName(name);
+    async execute({ name, description }: IRequest): Promise<void> {
+        const categoryExists = await this.categoriesRepository.findByName(name);
 
         if (categoryExists) {
-            throw new Error("Category already exists!");
+            throw new Error('Category already exists!');
         }
 
-        this.categoriesRepository.create({ name, description });
+        await this.categoriesRepository.create({ name, description });
     }
 }
