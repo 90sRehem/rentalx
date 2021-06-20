@@ -1,13 +1,17 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
+import { container } from 'tsyringe';
 
-import { ImportCategoryService } from "./ImportCategoryService";
+import { ImportCategoryService } from './ImportCategoryService';
 
 export class ImportCategoryController {
     // eslint-disable-next-line prettier/prettier
-    constructor(private importCategoryService: ImportCategoryService) { }
-    handle(request: Request, response: Response): Response {
+    async handle(request: Request, response: Response): Promise<Response> {
+        const importCategoryService = container.resolve(ImportCategoryService);
+
         const { file } = request;
-        this.importCategoryService.execute(file);
+
+        await importCategoryService.execute(file);
+
         return response.send();
     }
 }

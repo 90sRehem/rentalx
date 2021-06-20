@@ -1,3 +1,5 @@
+import { inject, injectable } from 'tsyringe';
+
 import { ICategoryRepository } from '../../repositories/ICategoriesRepository';
 
 interface IRequest {
@@ -5,9 +7,12 @@ interface IRequest {
     description: string;
 }
 
+@injectable()
 export class CreateCategoryService {
-    // eslint-disable-next-line prettier/prettier
-    constructor(private categoriesRepository: ICategoryRepository) { }
+    constructor(
+        @inject('CategoriesRepository')
+        private categoriesRepository: ICategoryRepository,
+    ) { }
     async execute({ name, description }: IRequest): Promise<void> {
         const categoryExists = await this.categoriesRepository.findByName(name);
 

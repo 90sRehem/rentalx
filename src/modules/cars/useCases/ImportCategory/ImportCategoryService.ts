@@ -1,17 +1,21 @@
-import csvParse from "csv-parse";
-import fs from "fs";
+import csvParse from 'csv-parse';
+import fs from 'fs';
+import { inject, injectable } from 'tsyringe';
 
-import { ICategoryRepository } from "../../repositories/ICategoriesRepository";
+import { ICategoryRepository } from '../../repositories/ICategoriesRepository';
 
 interface IImportCategory {
     name: string;
     description: string;
 }
 
+@injectable()
 export class ImportCategoryService {
     // eslint-disable-next-line prettier/prettier
-    constructor(private categoriesRepository: ICategoryRepository) { }
-
+    constructor(
+        @inject('CategoriesRepository')
+        private categoriesRepository: ICategoryRepository,
+    ) { }
 
     loadCategories(file: Express.Multer.File): Promise<IImportCategory[]> {
         return new Promise((resolve, reject) => {
@@ -21,18 +25,18 @@ export class ImportCategoryService {
             stream.pipe(parseFile);
 
             parseFile
-                .on("data", async (line) => {
+                .on('data', async line => {
                     const [name, description] = line;
                     categories.push({
                         name,
                         description,
                     });
                 })
-                .on("end", () => {
+                .on('end', () => {
                     fs.promises.unlink(file.path);
                     resolve(categories);
                 })
-                .on("error", (error) => {
+                .on('error', error => {
                     reject(error);
                 });
         });
@@ -41,10 +45,12 @@ export class ImportCategoryService {
     async execute(file: Express.Multer.File): Promise<void> {
         const categories = await this.loadCategories(file);
         categories.map(async ({ name, description }) => {
-            const categoryExists = this.categoriesRepository.findByName(name);
+            const categoryExists = await this.categoriesRepository.findByName(
+                name,
+            );
 
             if (!categoryExists) {
-                this.categoriesRepository.create({ name, description });
+                await this.categoriesRepository.create({ name, description });
             }
         });
     }
