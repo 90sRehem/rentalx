@@ -13,14 +13,15 @@ export class CreateSpecificationService {
         @inject('SpecificationRepository')
         private specificationRepository: ISpecificationsRepository,
     ) { }
-    execute({ description, name }: IRequest): void {
+
+    async execute({ description, name }: IRequest): Promise<void> {
         const specificationAlreadyExists =
-            this.specificationRepository.findByName(name);
+            await this.specificationRepository.findByName(name);
 
         if (specificationAlreadyExists) {
             throw new Error('Specification already exists!');
         }
 
-        this.specificationRepository.create({ description, name });
+        await this.specificationRepository.create({ description, name });
     }
 }
