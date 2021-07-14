@@ -6,11 +6,11 @@ import { SpecificationRepository } from '../../modules/cars/repositories/impleme
 import { ISpecificationsRepository } from '../../modules/cars/repositories/ISpecificationsRepository';
 
 container.registerSingleton<ICategoryRepository>(
-    'CategoriesRepository',
-    CategoriesRepository,
+  'CategoriesRepository',
+  CategoriesRepository,
 );
 
 container.registerSingleton<ISpecificationsRepository>(
-    'SpecificationRepository',
-    SpecificationRepository,
+  'SpecificationRepository',
+  SpecificationRepository,
 );
